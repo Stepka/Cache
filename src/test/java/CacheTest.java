@@ -1,5 +1,7 @@
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 
 public class CacheTest {
@@ -21,6 +23,9 @@ public class CacheTest {
         Assert.assertEquals(Cache.EvictionStrategy.LFU, cache.getStrategy());
     }
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
+
     @Test
     public void checkSize() throws Exception {
         Cache<Integer, Object> cache = new Cache(Cache.EvictionStrategy.LRU);
@@ -30,6 +35,12 @@ public class CacheTest {
 
         cache.setMaxSize(20);
         Assert.assertEquals(20, cache.getMaxSize());
+
+        exceptionRule.expect(InvalidSizeException.class);
+        cache.setMaxSize(0);
+
+        exceptionRule.expect(InvalidSizeException.class);
+        cache.setMaxSize(-1);
 
         // adding objects and checking size
 

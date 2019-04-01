@@ -86,7 +86,10 @@ public class Cache<K, V>  {
         return objects.size();
     }
 
-    public void setMaxSize(int maxSize) {
+    public void setMaxSize(int maxSize) throws InvalidSizeException {
+        if(maxSize <= 0) {
+            throw new InvalidSizeException("Invalid cache max size, size should be greater then zero.");
+        }
         this.maxSize = maxSize;
     }
 
@@ -117,5 +120,11 @@ class CachedObjectContainer <T>  {
 
     public CachedObjectContainer(T object) {
         this.object = object;
+    }
+}
+
+class InvalidSizeException extends Exception {
+    public InvalidSizeException(String errorMessage) {
+        super(errorMessage);
     }
 }
